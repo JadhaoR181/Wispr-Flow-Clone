@@ -16,7 +16,7 @@ export async function startMicrophone(
     audioContext = new AudioContext({sampleRate: SAMPLE_RATE});
     const source = audioContext.createMediaStreamSource(mediaStream);
 
-    processor = audioContext.createScriptProcessor(4096, 1, 1);
+    processor = audioContext.createScriptProcessor(1024, 1, 1);
 
     processor.onaudioprocess = (event) =>{
         const input = event.inputBuffer.getChannelData(0);

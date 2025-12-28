@@ -13,6 +13,11 @@ function isTauri() {
 
 let unsubscribe: (() => void) | null = null;
 
+export async function initDeepgramTauri(apiKey: string) {
+  if (!isTauri()) return;
+  await invoke("init_deepgram", { apiKey });
+}
+
 export async function startDeepgram(
   onTranscript: (text: string, isFinal: boolean) => void,
   onError?: (error: string) => void
@@ -25,10 +30,6 @@ export async function startDeepgram(
   }
 
   try {
-    const apiKey = import.meta.env.VITE_DEEPGRAM_API_KEY;
-    if (!apiKey) throw new Error("Deepgram API key not found");
-
-    // subscribe once per start
     if (unsubscribe) {
       unsubscribe();
       unsubscribe = null;
@@ -43,18 +44,12 @@ export async function startDeepgram(
     );
     unsubscribe = () => unlisten();
 
-    await invoke("start_listening", { apiKey });
-    console.log("✅ Deepgram connection established");
+    await invoke("start_listening");
+    console.log("✅ Deepgram listening started");
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);
     console.error("❌ Deepgram connection error:", msg);
-    if (msg.includes("429")) {
-      onError?.(
-        "Deepgram rate limit hit (429). Please wait a few seconds and try again."
-      );
-    } else {
-      onError?.(msg);
-    }
+    onError?.(msg);
     throw error;
   }
 }

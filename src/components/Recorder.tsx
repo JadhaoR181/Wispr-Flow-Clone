@@ -5,6 +5,7 @@ import "../App.css";
 function Recorder() {
   const {
     listening,
+    connecting,
     error,
     finalText,
     partialText,
@@ -30,22 +31,36 @@ function Recorder() {
     }
   };
 
+  const statusClass = listening
+    ? "recording"
+    : connecting
+    ? "connecting"
+    : "idle";
+
+  const statusLabel = listening
+    ? "🔴 Recording"
+    : connecting
+    ? "🟡 Connecting…"
+    : "⚪ Idle";
+
+  const buttonLabel = listening
+    ? "🔴 Release to Stop"
+    : connecting
+    ? "🟡 Connecting…"
+    : "🎤 Hold to Record";
+
   return (
     <div className="app-container">
       <header className="app-header">
         <h1>🎙️ Voice to Text</h1>
         <div className="status-indicators">
-          <span className={`status-badge ${listening ? "recording" : "idle"}`}>
-            {listening ? "🔴 Recording" : "⚪ Idle"}
+          <span className={`status-badge ${statusClass}`}>
+            {statusLabel}
           </span>
         </div>
       </header>
 
-      {error && (
-        <div className="error-banner">
-          ⚠️ {error}
-        </div>
-      )}
+      {error && <div className="error-banner">⚠️ {error}</div>}
 
       <main className="main-content">
         <div className="transcript-container">
@@ -84,11 +99,12 @@ function Recorder() {
         <div className="controls">
           <button
             className={`record-button ${listening ? "recording" : ""}`}
+            disabled={connecting}
             onMouseDown={start}
             onMouseUp={stop}
             onMouseLeave={() => listening && stop()}
           >
-            {listening ? "🔴 Release to Stop" : "🎤 Hold to Record"}
+            {buttonLabel}
           </button>
 
           <p className="hint">

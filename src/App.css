@@ -7,87 +7,81 @@
   box-sizing: border-box;
 }
 
-/* Light background */
+/* Full desktop background */
+html,
+body {
+  height: 100%;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, sans-serif;
-  background: #f5f5f7;
+  background: #f3f4f6;
   color: #111827;
 }
 
-/* Centered column app */
-.app-container {
+/* Center the app card in the window */
+.app-root {
   min-height: 100vh;
   display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Main card */
+.app-container {
+  width: 720px;
+  max-width: 95vw;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.18);
+  padding: 20px 22px 22px;
+  display: flex;
   flex-direction: column;
-  padding: 24px 20px;
-  max-width: 900px;
-  margin: 0 auto;
 }
 
 /* Header */
 .app-header {
-  margin-bottom: 24px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
 }
 
 .app-header h1 {
-  font-size: 2.2rem;
-  margin-bottom: 12px;
-  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 40%, #ec4899 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: 1.6rem;
+  font-weight: 600;
 }
 
-/* Status pills */
+/* Status pill */
 .status-indicators {
   display: flex;
-  gap: 12px;
-  justify-content: center;
-  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .status-badge {
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 0.85rem;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.8rem;
   font-weight: 500;
   border: 1px solid #e5e7eb;
 }
 
-.status-badge.connected {
-  background: #ecfdf5;
-  color: #16a34a;
-  border-color: #bbf7d0;
-}
-
-.status-badge.disconnected {
-  background: #fef2f2;
-  color: #dc2626;
-  border-color: #fecaca;
-}
-
 .status-badge.recording {
-  background: #fef2f2;
-  color: #dc2626;
+  background: #fee2e2;
+  color: #b91c1c;
   border-color: #fecaca;
-  animation: pulse 1.5s ease-in-out infinite;
 }
 
 .status-badge.idle {
-  background: #eef2ff;
-  color: #4f46e5;
-  border-color: #c7d2fe;
+  background: #f9fafb;
+  color: #4b5563;
 }
 
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.6;
-  }
+.status-badge.connecting {
+  background: #fffbeb;
+  color: #92400e;
+  border-color: #fed7aa;
 }
 
 /* Error banner */
@@ -95,41 +89,39 @@ body {
   background: #fef2f2;
   border: 1px solid #fecaca;
   color: #b91c1c;
-  padding: 12px 14px;
+  padding: 10px 12px;
   border-radius: 10px;
-  margin-bottom: 18px;
-  text-align: center;
-  font-size: 0.9rem;
+  margin-bottom: 12px;
+  font-size: 0.85rem;
 }
 
-/* Main layout */
+/* Main layout: transcript + controls */
 .main-content {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px;
 }
 
-/* Transcript card */
+/* Transcript section */
 .transcript-container {
-  flex: 1;
-  background: #ffffff;
+  background: #f9fafb;
   border-radius: 14px;
-  padding: 18px 18px 16px;
+  padding: 14px 14px 12px;
   border: 1px solid #e5e7eb;
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .transcript-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  justify-content: space-between;
 }
 
 .transcript-header h2 {
-  font-size: 1.1rem;
-  color: #111827;
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 /* Copy / Clear buttons */
@@ -139,14 +131,14 @@ body {
 }
 
 .button-group button {
-  padding: 6px 12px;
-  background: #f9fafb;
+  padding: 5px 10px;
+  background: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 999px;
   color: #374151;
   cursor: pointer;
-  font-size: 0.85rem;
-  transition: all 0.18s ease;
+  font-size: 0.8rem;
+  transition: background 0.15s ease, border-color 0.15s ease;
 }
 
 .button-group button:hover:not(:disabled) {
@@ -162,129 +154,121 @@ body {
 /* Textarea */
 .transcript-output {
   width: 100%;
-  min-height: 260px;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
+  min-height: 220px;
   border-radius: 10px;
-  padding: 12px 14px;
-  color: #111827;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  padding: 10px 12px;
   font-size: 0.95rem;
   line-height: 1.6;
   resize: vertical;
+  color: #111827;
   font-family: inherit;
 }
 
 .transcript-output:focus {
   outline: none;
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 1px #4f46e5;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 1px #2563eb1a;
 }
 
 /* “Processing…” indicator */
 .partial-indicator {
-  margin-top: 8px;
   display: flex;
   align-items: center;
   gap: 6px;
+  font-size: 0.8rem;
   color: #6b7280;
-  font-size: 0.85rem;
 }
 
 .blinking-dot {
-  color: #4f46e5;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #22c55e;
   animation: blink 1s ease-in-out infinite;
 }
 
 @keyframes blink {
   0%,
   100% {
-    opacity: 1;
+    opacity: 0.2;
   }
   50% {
-    opacity: 0.3;
+    opacity: 1;
   }
 }
 
-/* Controls section */
+/* Controls */
 .controls {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding-top: 4px;
 }
 
 /* Record button */
 .record-button {
-  padding: 18px 46px;
-  font-size: 1.05rem;
+  padding: 12px 34px;
+  font-size: 0.95rem;
   font-weight: 600;
-  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 40%, #ec4899 100%);
-  border: none;
+  background: #111827;
+  color: #f9fafb;
   border-radius: 999px;
-  color: #ffffff;
+  border: none;
   cursor: pointer;
-  transition: all 0.25s;
-  box-shadow: 0 6px 18px rgba(79, 70, 229, 0.45);
+  box-shadow: 0 5px 12px rgba(15, 23, 42, 0.25);
+  transition: background 0.15s ease, transform 0.1s ease,
+    box-shadow 0.1s ease;
 }
 
 .record-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 26px rgba(79, 70, 229, 0.55);
+  background: #0f172a;
+  transform: translateY(-1px);
 }
 
 .record-button:active:not(:disabled) {
   transform: translateY(0);
+  box-shadow: 0 3px 7px rgba(15, 23, 42, 0.25);
 }
 
 .record-button.recording {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  animation: pulse-recording 1.5s ease-in-out infinite;
+  background: #b91c1c;
 }
 
 .record-button:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-  background: #9ca3af;
+  opacity: 0.6;
   box-shadow: none;
+  cursor: not-allowed;
 }
 
-@keyframes pulse-recording {
-  0%,
-  100% {
-    box-shadow: 0 6px 18px rgba(239, 68, 68, 0.4);
-  }
-  50% {
-    box-shadow: 0 6px 28px rgba(239, 68, 68, 0.75);
-  }
-}
-
-/* Hint under the button */
+/* Hint */
 .hint {
-  margin-top: 16px;
+  font-size: 0.8rem;
   color: #6b7280;
-  font-size: 0.85rem;
 }
 
 kbd {
   background: #f3f4f6;
   border: 1px solid #e5e7eb;
-  border-radius: 4px;
-  padding: 2px 8px;
-  font-family: monospace;
-  color: #111827;
+  border-radius: 3px;
+  padding: 1px 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
 }
 
-/* Responsive */
+/* Small-screen tweak */
 @media (max-width: 768px) {
-  .app-header h1 {
-    font-size: 2rem;
+  .app-container {
+    width: 100%;
+    margin: 0 8px;
+    padding: 16px 14px 18px;
   }
 
-  .transcript-header {
+  .app-header {
     flex-direction: column;
-    gap: 10px;
     align-items: flex-start;
-  }
-
-  .record-button {
-    padding: 16px 36px;
-    font-size: 1rem;
+    gap: 6px;
   }
 }

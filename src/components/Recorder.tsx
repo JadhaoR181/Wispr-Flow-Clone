@@ -52,7 +52,7 @@ function Recorder() {
   return (
     <div className="app-container">
       <header className="app-header">
-        <h1>🎙️ Voice to Text</h1>
+        <h1>Wispr Flow Clone</h1>
         <div className="status-indicators">
           <span className={`status-badge ${statusClass}`}>
             {statusLabel}

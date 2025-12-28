@@ -1,4 +1,3 @@
-// src/audio/useMicrophone.tsx
 import { useCallback, useEffect, useState } from "react";
 import {
   initDeepgramTauri,
@@ -21,7 +20,7 @@ export function useMicrophone() {
         const apiKey = import.meta.env.VITE_DEEPGRAM_API_KEY;
         if (!apiKey) throw new Error("Deepgram API key not found");
         await initDeepgramTauri(apiKey);
-        console.log("✅ Deepgram initialized on app start");
+        console.log(" Deepgram initialized on app start");
       } catch (e) {
         const msg =
           e instanceof Error ? e.message : "Failed to init Deepgram";
@@ -59,7 +58,7 @@ export function useMicrophone() {
       setError(null);
       setPartialText("");
       await startDeepgram(handleTranscript, handleError);
-      console.log("✅ Recording started");
+      console.log(" Recording started");
     } catch {
       setListening(false);
     }
@@ -71,7 +70,7 @@ export function useMicrophone() {
       await stopDeepgram();
     } finally {
       setListening(false);
-      console.log("✅ Recording stopped");
+      console.log(" Recording stopped");
     }
   }, [listening]);
 

@@ -1,4 +1,3 @@
-// src/App.tsx
 import "./App.css";
 import Recorder from "./components/Recorder";
 

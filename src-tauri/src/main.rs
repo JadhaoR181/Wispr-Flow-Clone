@@ -1,4 +1,3 @@
-// src-tauri/src/main.rs
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use tauri::{AppHandle, Emitter, Manager, State};
@@ -27,14 +26,13 @@ struct AppState {
     running: Arc<Mutex<bool>>,
 }
 
-// 1) Connect to Deepgram, but DO NOT start sending audio yet
+// Connect to Deepgram, but DO NOT start sending audio yet
 #[tauri::command]
 async fn init_deepgram(
     app: AppHandle,
     state: State<'_, Arc<AppState>>,
     api_key: String,
 ) -> Result<(), String> {
-    // Already connected? Do nothing.
     if state.ws.lock().await.is_some() {
         println!("Deepgram already initialized");
         return Ok(());
@@ -126,11 +124,11 @@ async fn init_deepgram(
         }
     });
 
-    println!("✅ Deepgram initialized (WS open, no audio yet)");
+    println!(" Deepgram initialized (WS open, no audio yet)");
     Ok(())
 }
 
-// 2) Start sending audio while button/Space held
+//Start sending audio while button/Space held
 #[tauri::command]
 async fn start_listening(
     state: State<'_, Arc<AppState>>,
@@ -143,7 +141,7 @@ async fn start_listening(
     Ok(())
 }
 
-// 3) Stop sending audio and close WS
+//Stop sending audio and close WS
 #[tauri::command]
 async fn stop_listening(
     state: State<'_, Arc<AppState>>,
@@ -155,11 +153,11 @@ async fn stop_listening(
     if let Some(mut ws) = state.ws.lock().await.take() {
         let _ = ws.close().await;
     }
-    println!("✅ Stopped listening (running=false, WS closed)");
+    println!(" Stopped listening (running=false, WS closed)");
     Ok(())
 }
 
-// 4) Create CPAL stream ONCE and use running flag inside callback
+//Create CPAL stream ONCE and use running flag inside callback
 fn main() {
     tauri::Builder::default()
         .setup(|app| {
@@ -198,7 +196,7 @@ fn main() {
                     let sample_format = supported_config.sample_format();
 
                     println!(
-                        "🎤 Using default input: {} channels @ {} Hz, format {:?}",
+                        "Using default input: {} channels @ {} Hz, format {:?}",
                         channels, sample_rate, sample_format
                     );
 
@@ -277,7 +275,7 @@ fn main() {
                                         .collect();
                                     let _ = audio_tx.send(pcm);
                                 },
-                                |err| eprintln!("❌ Stream error: {err}"),
+                                |err| eprintln!(" Stream error: {err}"),
                                 None,
                             )
                             .expect("Failed to build stream"),
@@ -293,7 +291,7 @@ fn main() {
                         eprintln!("Failed to start stream: {e}");
                         return;
                     }
-                    println!("✅ CPAL stream started (waiting for running=true)");
+                    println!("CPAL stream started (waiting for running=true)");
                     std::mem::forget(stream);
                 });
             }

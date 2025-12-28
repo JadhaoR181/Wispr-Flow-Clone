@@ -38,16 +38,16 @@ function Recorder() {
     : "idle";
 
   const statusLabel = listening
-    ? "🔴 Recording"
+    ? " Recording"
     : connecting
-    ? "🟡 Connecting…"
-    : "⚪ Idle";
+    ? " Connecting…"
+    : " Idle";
 
   const buttonLabel = listening
-    ? "🔴 Release to Stop"
+    ? " Release to Stop"
     : connecting
-    ? "🟡 Connecting…"
-    : "🎤 Hold to Record";
+    ? " Connecting…"
+    : " Hold to Record";
 
   return (
     <div className="app-container">
@@ -60,7 +60,7 @@ function Recorder() {
         </div>
       </header>
 
-      {error && <div className="error-banner">⚠️ {error}</div>}
+      {error && <div className="error-banner"> {error}</div>}
 
       <main className="main-content">
         <div className="transcript-container">
@@ -71,13 +71,13 @@ function Recorder() {
                 onClick={copyToClipboard}
                 disabled={!finalText && !partialText}
               >
-                📋 Copy
+                 Copy
               </button>
               <button
                 onClick={clearText}
                 disabled={!finalText && !partialText}
               >
-                🗑️ Clear
+                 Clear
               </button>
             </div>
           </div>
@@ -108,7 +108,7 @@ function Recorder() {
           </button>
 
           <p className="hint">
-            💡 Tip: Press and hold <kbd>Space</kbd> for push-to-talk
+             Tip: Press and hold <kbd>Space</kbd> for push-to-talk
           </p>
         </div>
       </main>

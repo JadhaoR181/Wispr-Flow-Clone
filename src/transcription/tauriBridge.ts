@@ -1,4 +1,3 @@
-// src/transcription/tauriBridge.ts
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
 
@@ -45,10 +44,10 @@ export async function startDeepgram(
     unsubscribe = () => unlisten();
 
     await invoke("start_listening");
-    console.log("✅ Deepgram listening started");
+    console.log(" Deepgram listening started");
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);
-    console.error("❌ Deepgram connection error:", msg);
+    console.error(" Deepgram connection error:", msg);
     onError?.(msg);
     throw error;
   }
@@ -59,9 +58,9 @@ export async function stopDeepgram() {
 
   try {
     await invoke("stop_listening");
-    console.log("✅ Deepgram connection closed");
+    console.log(" Deepgram connection closed");
   } catch (error) {
-    console.error("❌ Error stopping Deepgram:", error);
+    console.error(" Error stopping Deepgram:", error);
   } finally {
     if (unsubscribe) {
       unsubscribe();

@@ -1,7 +1,8 @@
+// src/transcription/tauriBridge.ts
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
 
-type DeepgramPayload = {
+export type DeepgramPayload = {
   text: string;
   final: boolean;
 };
@@ -10,36 +11,66 @@ function isTauri() {
   return "__TAURI_INTERNALS__" in window;
 }
 
+let unsubscribe: (() => void) | null = null;
+
 export async function startDeepgram(
-  onTranscript: (text: string, isFinal: boolean) => void
+  onTranscript: (text: string, isFinal: boolean) => void,
+  onError?: (error: string) => void
 ) {
   if (!isTauri()) {
-    console.warn("Not running inside Tauri — Deepgram disabled");
+    const msg = "Not running in Tauri environment";
+    console.warn(msg);
+    onError?.(msg);
     return;
   }
 
-  await invoke("start_deepgram", {
-    apiKey: import.meta.env.VITE_DEEPGRAM_API_KEY,
-  });
+  try {
+    const apiKey = import.meta.env.VITE_DEEPGRAM_API_KEY;
+    if (!apiKey) throw new Error("Deepgram API key not found");
 
-  await new Promise((r) => setTimeout(r, 300));
+    // subscribe once per start
+    if (unsubscribe) {
+      unsubscribe();
+      unsubscribe = null;
+    }
 
-  await listen<DeepgramPayload>("deepgram-transcript", (event) => {
-    onTranscript(event.payload.text, event.payload.final)
-  });
-}
+    const unlisten = await listen<DeepgramPayload>(
+      "deepgram-transcript",
+      (event) => {
+        console.log("EVENT FROM RUST:", event.payload);
+        onTranscript(event.payload.text, event.payload.final);
+      }
+    );
+    unsubscribe = () => unlisten();
 
-export async function sendAudioChunk(chunk: Float32Array) {
-  if (!isTauri()) return;
-
-  const pcm16 = Array.from(chunk, (v) =>
-    Math.max(-1, Math.min(1, v)) * 0x7fff
-  ).map(Math.round);
-
-  invoke("send_audio_chunk", { chunk: pcm16 });
+    await invoke("start_listening", { apiKey });
+    console.log("✅ Deepgram connection established");
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error("❌ Deepgram connection error:", msg);
+    if (msg.includes("429")) {
+      onError?.(
+        "Deepgram rate limit hit (429). Please wait a few seconds and try again."
+      );
+    } else {
+      onError?.(msg);
+    }
+    throw error;
+  }
 }
 
 export async function stopDeepgram() {
   if (!isTauri()) return;
-  await invoke("stop_deepgram");
+
+  try {
+    await invoke("stop_listening");
+    console.log("✅ Deepgram connection closed");
+  } catch (error) {
+    console.error("❌ Error stopping Deepgram:", error);
+  } finally {
+    if (unsubscribe) {
+      unsubscribe();
+      unsubscribe = null;
+    }
+  }
 }

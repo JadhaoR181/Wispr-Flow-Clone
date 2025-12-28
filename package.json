@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "tauri": "tauri"
+    "build": "tsc && vite build",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build"
   },
+
   "dependencies": {
     "@tauri-apps/api": "^2.9.1",
     "react": "^19.2.0",

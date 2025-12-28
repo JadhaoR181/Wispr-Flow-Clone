@@ -26,7 +26,7 @@ The goal is to demonstrate:
 
 ---
 
-## 🔑 Core Features (Assignment Mapping)
+## 🔑 Core Features
 
 - ✅ **Push‑to‑Talk Voice Input**  
   Press and hold **Space** (or click the Record button) to start capturing microphone audio; release to stop.

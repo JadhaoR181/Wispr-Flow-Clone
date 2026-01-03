@@ -19,7 +19,7 @@ The goal is to demonstrate:
 
 ## 🎥 Demo & Screenshots
 
-- **Demo video **: `YouTube / Google Drive link`
+- <video src="https://github.com/user-attachments/assets/59e8188a-881d-4677-b49e-feea7256e3a2" controls title="Video Demo" width="600"></video>
 - **Screenshots**:
   - Main voice‑to‑text window showing push‑to‑talk and transcription.
   - Error state (e.g., no API key / no microphone).
